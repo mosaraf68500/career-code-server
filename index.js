@@ -29,6 +29,7 @@ async function run() {
     await client.connect();
 
     const jobCollection=client.db('carrerCode').collection('jobs');
+    const applicaitonsCollection=client.db('carrerCode').collection('apply');
 
     // api
     app.get("/jobs",async(req,res)=>{
@@ -46,6 +47,20 @@ async function run() {
         res.send(result)
     })
 
+
+
+    // appliction apis
+    app.post("/applications",async(req,res)=>{
+        const appliction=req.body;
+        const result=await applicaitonsCollection.insertOne(appliction);
+        res.send(result);
+    })
+
+    app.get("/applications",async(req,res)=>{
+        const cursor=applicaitonsCollection.find();
+        const result=await cursor.toArray();
+        res.send(result);
+    })
 
 
     await client.db("admin").command({ ping: 1 });
